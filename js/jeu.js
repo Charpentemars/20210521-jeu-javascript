@@ -26,6 +26,13 @@ monstreImage.onload = function() {
 }
 monstreImage.src = "images/monster.png";
 
+let monstreReady2 = false;
+const monstreImage2 = new Image();
+monstreImage2.onload = function() {
+    monstreReady2 = true;
+}
+monstreImage2.src = "images/angry-monster.png";
+
 const heros = {
     speed: 256,
     x: 0,
@@ -35,6 +42,12 @@ const monstre = {
     x: 0,
     y: 0
 };
+
+const monstre2 = {
+    x: 0,
+    y: 0
+};
+
 let monstresAttrapes = 0;
 
 const touchesAppyees = {};
@@ -42,18 +55,32 @@ const touchesAppyees = {};
 function convertirCode(code) {
     let keyCode = 0;
     switch (code) {
-        case ("ArrowDown"):
-            keyCode = 40;
-            break;
-        case ("ArrowUp"):
-            keyCode = 38;
-            break;
-        case ("ArrowLeft"):
+        case "ArrowLeft":
             keyCode = 37;
             break;
-        case ("ArrowRight"):
+        case "ArrowUp":
+            keyCode = 38;
+            break;
+        case "ArrowRight":
             keyCode = 39;
             break;
+        case "ArrowDown":
+            keyCode = 40;
+            break;
+
+        case "KeyW":
+            keyCode = 38;
+            break;
+        case "KeyA":
+            keyCode = 37;
+            break;
+        case "KeyS":
+            keyCode = 40;
+            break;
+        case "KeyD":
+            keyCode = 39;
+            break;
+
     }
     return keyCode;
 }
@@ -77,7 +104,12 @@ function reset() {
     monstre.x = 32 + (Math.random() * (canvas.width - 96));
     monstre.y = 32 + (Math.random() * (canvas.height - 96));
 
+    monstre2.x = 32 + (Math.random() * (canvas.width - 96));
+    monstre2.y = 32 + (Math.random() * (canvas.height - 96));
+
+
     console.log(monstre);
+    console.log(monstre2);
 }
 
 function update(modifier) {
@@ -94,7 +126,7 @@ function update(modifier) {
         heros.y += heros.speed * modifier;
     }
 
-    // Y a-t-il contact ?
+    // Y a-t-il contact avec monstre ?
     if (
         heros.x <= (monstre.x + 32)
         && monstre.x <= (heros.x + 32)
@@ -104,6 +136,17 @@ function update(modifier) {
         ++monstresAttrapes;
         reset();
     }
+    // Y a-t-il contact avec monstre2 ?
+    if (
+        heros.x <= (monstre2.x + 32)
+        && monstre2.x <= (heros.x + 32)
+        && heros.y <= (monstre2.y + 32)
+        && monstre2.y <= (heros.y + 32)
+    ) {
+        ++monstresAttrapes;
+        reset();
+    }
+
 }
 
 function render() {
@@ -115,6 +158,9 @@ function render() {
     }
     if (monstreReady) {
         ctx.drawImage(monstreImage, monstre.x, monstre.y);
+    }
+    if (monstreReady2) {
+        ctx.drawImage(monstreImage2, monstre2.x, monstre2.y);
     }
 
     // Score
